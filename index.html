@@ -124,6 +124,19 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .login p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
 .login .err{color:var(--down);font-size:13px;margin-top:8px;min-height:18px}
 .offline{background:var(--downbg);color:var(--down);border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+.tgroups{display:grid;gap:14px}
+@media(min-width:900px){.tgroups{grid-template-columns:1fr 1fr;align-items:start}}
+.tgroup{padding:0;overflow:hidden}
+.thead{display:flex;align-items:center;gap:12px;padding:16px 16px 12px}
+.tname{flex:1;min-width:0}.tname b{display:block;font-size:17px;font-weight:800}.tname span{display:block;font-size:12px;color:var(--muted)}
+.tsum{text-align:right}.tsum b{display:block;font-size:22px;font-weight:800;line-height:1.1}.tsum span{font-size:12px;color:var(--muted)}
+.tgroup .kv{margin:0 16px;padding:12px 0 14px}
+.trows{border-top:1px solid var(--line)}
+.trows .trow{border:0;border-radius:0;border-bottom:1px solid var(--line);background:none;padding:12px 16px}
+.trows .trow:last-child{border-bottom:0}
+.trow .tmid b.up{color:var(--up)}.trow .tmid b.down{color:var(--down)}
+.tmid .tag{margin-right:6px;vertical-align:1px}
+.left{display:inline-block;font-size:12px;font-weight:700;color:var(--ink);background:var(--bg);padding:3px 9px;border-radius:999px}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -174,7 +187,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
     <label>佣金 (US$)<input id="f_fee" type="number" inputmode="decimal" step="any" placeholder="7.50"></label>
   </div>
   <label>備註<input id="f_note" placeholder="選填"></label>
-  <div class="preview"><span id="f_totlabel">總成本</span><b class="num" id="f_total">$0.00</b></div>
+  <div class="preview"><span id="f_totlabel">總成本</span><b class="num" id="f_total">US$0.00</b></div>
   <div class="hint" id="f_hint"></div>
   <button class="primary" id="f_save" onclick="saveForm()">儲存</button>
   <button class="danger" id="f_del" onclick="delTrade()" hidden>刪除這筆紀錄</button>
@@ -203,10 +216,10 @@ let S = {trades:[], prices:{}}, tab = 'home', filter = 'ALL', editing = null, ft
 
 /* ---------- 格式 ---------- */
 const nf = (v,a,b) => Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:a,maximumFractionDigits:b});
-const money = v => (v < 0 ? '-' : '') + '$' + nf(v,2,2);
-const signed = v => (v > 0.0049 ? '+' : v < -0.0049 ? '-' : '') + '$' + nf(v,2,2);
+const money = v => (v < 0 ? '-' : '') + 'US$' + nf(v,2,2);
+const signed = v => (v > 0.0049 ? '+' : v < -0.0049 ? '-' : '') + 'US$' + nf(v,2,2);
 const pct = v => (v > 0.00005 ? '+' : '') + (v*100).toFixed(2) + '%';
-const px = v => '$' + nf(v,2,4);
+const px = v => 'US$' + nf(v,2,4);
 const sharesF = v => v.toLocaleString('en-US',{maximumFractionDigits:4});
 const cls = v => v > 0.0049 ? 'up' : v < -0.0049 ? 'down' : '';
 const bg = v => v > 0.0049 ? 'bg-up' : v < -0.0049 ? 'bg-down' : 'bg-flat';
@@ -377,28 +390,43 @@ function renderHome(H){
 function renderTrades(H){
   const tks = [...new Set(S.trades.map(t => t.ticker))].sort();
   if (filter !== 'ALL' && !tks.includes(filter)) filter = 'ALL';
-  const list = S.trades.filter(t => filter === 'ALL' || t.ticker === filter)
-    .sort((a,b) => b.date.localeCompare(a.date) || String(b.createdAt).localeCompare(String(a.createdAt)));
+  // 每筆交易之後仲有幾多股（好似記錄表嘅 Shares Left）
+  const run = {}, left = {};
+  [...S.trades].sort((a,b) => a.date.localeCompare(b.date) || String(a.createdAt).localeCompare(String(b.createdAt)))
+    .forEach(t => { run[t.ticker] = Math.max(0, (run[t.ticker] || 0) + (t.type === 'Sell' ? -t.shares : t.shares)); left[t.id] = run[t.ticker]; });
   const chips = ['ALL', ...tks].map(k => `<button class="chip ${filter===k?'on':''}" onclick="filter='${esc(k)}';render()">${k==='ALL'?'全部':esc(sym(k))}</button>`).join('');
-  let head = '';
-  if (filter !== 'ALL' && H[filter]){
-    const h = H[filter];
-    head = `<div class="card" style="margin-bottom:12px"><div class="kv" style="margin:0;padding:0;border:0">
-      <div><span>持股</span><b class="num">${sharesF(h.shares)}</b></div>
-      <div><span>平均成本</span><b class="num">${px(h.avg)}</b></div>
-      <div><span>未實現盈虧</span><b class="num ${cls(h.pl)}">${signed(h.pl)}</b></div></div></div>`;
-  }
-  const rows = list.map(t => {
-    const amt = t.type === 'Sell' ? t.price*t.shares - t.fee : t.price*t.shares + t.fee;
-    const sell = t.type === 'Sell';
-    return `<button class="trow" onclick="openForm('${esc(t.id)}')">
-      <div class="badge sm" style="background:${color(t.ticker)}">${esc(sym(t.ticker))}</div>
-      <div class="tmid"><b class="num">${sharesF(t.shares)} 股 @ ${px(t.price)}</b>
-        <span>${dateF(t.date)} · 佣金 ${money(t.fee)}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
-      <div class="tamt"><b class="num">${money(amt)}</b><span class="tag ${sell?'bg-down':'bg-up'}">${sell?'賣出':'買入'}</span></div>
-    </button>`;
+  const show = filter === 'ALL' ? tks : [filter];
+  const groups = show.map(k => {
+    const h = H[k] || {shares:0, avg:0, cost:0, mv:0, pl:0, plPct:0, realized:0, name:''};
+    const list = S.trades.filter(t => t.ticker === k)
+      .sort((a,b) => b.date.localeCompare(a.date) || String(b.createdAt).localeCompare(String(a.createdAt)));
+    const rows = list.map(t => {
+      const sell = t.type === 'Sell';
+      const amt = sell ? t.price*t.shares - t.fee : t.price*t.shares + t.fee;
+      return `<button class="trow" onclick="openForm('${esc(t.id)}')">
+        <div class="tmid"><b class="num ${sell?'down':'up'}">${sell?'−':'+'}${sharesF(t.shares)} 股 @ ${px(t.price)}</b>
+          <span><i class="tag ${sell?'bg-down':'bg-up'}" style="font-style:normal">${sell?'賣出':'買入'}</i>${dateF(t.date)} · 佣金 ${money(t.fee)}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
+        <div class="tamt"><b class="num">${money(amt)}</b><span class="left num">持股 ${sharesF(left[t.id])}</span></div>
+      </button>`;
+    }).join('');
+    const closed = h.shares <= 0;
+    return `<section class="card tgroup">
+      <div class="thead">
+        <div class="badge" style="background:${color(k)}">${esc(sym(k))}</div>
+        <div class="tname"><b>${esc(sym(k))}</b><span class="ellip">${esc(h.name || '—')} · ${list.length} 筆</span></div>
+        <div class="tsum"><b class="num">${sharesF(h.shares)} 股</b><span class="num">${closed ? '已全部賣出' : '平均成本 ' + px(h.avg)}</span></div>
+      </div>
+      <div class="kv">
+        <div><span>總成本（連佣金）</span><b class="num">${money(h.cost)}</b></div>
+        <div><span>市值</span><b class="num">${money(h.mv)}</b></div>
+        ${closed
+          ? `<div><span>已實現盈虧</span><b class="num ${cls(h.realized)}">${signed(h.realized)}</b></div>`
+          : `<div><span>未實現盈虧</span><b class="num ${cls(h.pl)}">${signed(h.pl)} <small>(${pct(h.plPct)})</small></b></div>`}
+      </div>
+      <div class="trows">${rows}</div>
+    </section>`;
   }).join('');
-  $('#v_trades').innerHTML = `<div class="chips">${chips}</div>${head}<div class="tlist">${rows || '<div class="card empty">未有紀錄</div>'}</div>`;
+  $('#v_trades').innerHTML = `<div class="chips">${chips}</div><div class="tgroups">${groups || '<div class="card empty">未有紀錄</div>'}</div>`;
 }
 
 /* ---------- 表格 ---------- */
