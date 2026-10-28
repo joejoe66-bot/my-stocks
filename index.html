@@ -137,6 +137,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .live::after{content:'';position:absolute;inset:0;border-radius:50%;background:#22c55e;animation:ping 1.8s ease-out infinite}
 @keyframes ping{0%{transform:scale(1);opacity:.55}80%,100%{transform:scale(2.8);opacity:0}}
 @media (prefers-reduced-motion:reduce){.live::after{animation:none}}
+.lp{font-style:normal;font-weight:700;color:var(--down)}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -410,7 +411,7 @@ function renderHome(H){
         <div class="badge" style="background:${color(h.ticker)}">${esc(sym(h.ticker))}</div>
         <div class="sname"><b>${esc(sym(h.ticker))}</b><span class="ellip">${esc(h.name || '—')}</span></div>
         <div class="sright"><b class="num">${h.hasPrice ? px(h.price) : '—'}</b>
-          ${h.hasPrice ? `<span><i class="live" title="${T('delayNote')}"></i>${T('nowPrice')}</span>` : `<span class="tag bg-flat">${T('noQuote')}</span>`}</div>
+          ${h.hasPrice ? `<span><i class="live" title="${T('delayNote')}"></i><em class="lp">${T('nowPrice')}</em></span>` : `<span class="tag bg-flat">${T('noQuote')}</span>`}</div>
       </div>
       <div class="kv">
         <div><span>${T('shares')}</span><b class="num">${sharesF(h.shares)}</b></div>
@@ -470,7 +471,7 @@ function renderTrades(H){
         <div class="sright"><b class="num">${T('nShares',{n:sharesF(h.shares)})}</b>${closed ? `<span>${T('soldOut')}</span>` : ''}</div>
       </div>
       <div class="kv">
-        <div><span><i class="live" title="${T('delayNote')}"></i>${T('nowPrice')}</span><b class="num">${h.hasPrice ? px(h.price) : T('noQuote')}</b></div>
+        <div><span><i class="live" title="${T('delayNote')}"></i><em class="lp">${T('nowPrice')}</em></span><b class="num">${h.hasPrice ? px(h.price) : T('noQuote')}</b></div>
         <div><span>${T('mv')}</span><b class="num">${money(h.mv)}</b></div>
         ${closed
           ? `<div><span>${T('realized')}</span><b class="num ${cls(h.realized)}">${signed(h.realized)}</b></div>`
