@@ -27,13 +27,15 @@
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang HK","Noto Sans TC","Microsoft JhengHei",sans-serif;-webkit-font-smoothing:antialiased}
 .num{font-variant-numeric:tabular-nums}
 .wrap{max-width:1100px;margin:0 auto;padding:0 16px calc(110px + env(safe-area-inset-bottom))}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) 0 14px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 0 14px}
 header h1{font-size:26px;margin:0;font-weight:800;letter-spacing:-.02em}
 .sub{color:var(--muted);font-size:12px;margin-top:3px}
-.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.hbtns{display:flex;gap:8px;flex-shrink:0}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;font:inherit;font-weight:800;font-size:14px}
 .iconbtn.spin svg{animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .demo{background:#fff4dc;color:#8a5a00;border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+.offline{background:var(--downbg);color:var(--down);border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:12px}
 .hero{display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:760px){.hero{grid-template-columns:1.5fr 1fr}}
 .summary{background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;border-radius:22px;padding:20px;box-shadow:var(--shadow)}
@@ -54,21 +56,25 @@ header h1{font-size:26px;margin:0;font-weight:800;letter-spacing:-.02em}
 .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
 .muted{color:var(--muted)}
 h2{font-size:18px;margin:26px 2px 12px}
-.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+/* 每隻股票用自己顏色嘅框 */
+.stock{padding:0;overflow:hidden;border:2px solid var(--c)}
+.shead{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--ct);border-bottom:1px solid var(--line)}
 .hold{cursor:pointer}
-.hold .head{display:flex;align-items:center;gap:12px}
 .badge{min-width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;padding:0 6px;flex-shrink:0}
-.badge.sm{min-width:40px;height:40px;border-radius:12px;font-size:11px}
-.hold .name{font-weight:800;font-size:17px}
+.sname{flex:1;min-width:0}.sname b{display:block;font-size:17px;font-weight:800}.sname span{display:block;font-size:12px;color:var(--muted)}
 .ellip{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hold .meta{color:var(--muted);font-size:12px;max-width:150px}
-.hold .px{margin-left:auto;text-align:right}
-.hold .px b{font-size:18px;display:block;margin-bottom:3px}
-.tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;display:inline-block}
-.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 8px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.sright{text-align:right;flex-shrink:0}
+.sright b{display:block;font-size:20px;font-weight:800;line-height:1.15;margin-bottom:3px}
+.sright span{font-size:12px;color:var(--muted)}
+.tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;display:inline-block;font-style:normal}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 8px;padding:14px 16px}
+.kv.k2{grid-template-columns:repeat(2,1fr)}
 .kv span{display:block;font-size:11px;color:var(--muted);margin-bottom:2px}
 .kv b{font-size:14px}
-.plbar{margin-top:14px;display:flex;justify-content:space-between;align-items:center;padding:11px 13px;border-radius:12px;font-size:14px}
+.kv small{font-size:11px}
+.plbar span{white-space:nowrap}
+.plbar{margin:0 16px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 13px;border-radius:12px;font-size:14px}
 .up{color:var(--up)}.down{color:var(--down)}
 .bg-up{background:var(--upbg);color:var(--up)}.bg-down{background:var(--downbg);color:var(--down)}.bg-flat{background:var(--bg);color:var(--muted)}
 .empty{text-align:center;color:var(--muted);padding:40px 16px}
@@ -76,11 +82,14 @@ h2{font-size:18px;margin:26px 2px 12px}
 .chips::-webkit-scrollbar{display:none}
 .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;font:inherit;font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer}
 .chip.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
-.tlist{display:grid;gap:8px}
-@media(min-width:760px){.tlist{grid-template-columns:1fr 1fr}}
-.trow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font:inherit;color:var(--ink);cursor:pointer}
-.tmid{flex:1;min-width:0}.tmid b{display:block;font-size:15px}.tmid span{font-size:12px;color:var(--muted)}
-.tamt{text-align:right}.tamt b{display:block;font-size:15px;margin-bottom:3px}
+.tgroups{display:grid;gap:14px}
+@media(min-width:900px){.tgroups{grid-template-columns:1fr 1fr;align-items:start}}
+.trows{border-top:1px solid var(--line)}
+.trow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 16px;font:inherit;color:var(--ink);cursor:pointer}
+.trow:last-child{border-bottom:0}
+.tmid{flex:1;min-width:0}.tmid b{display:block;font-size:15px;margin-bottom:3px}.tmid span{font-size:12px;color:var(--muted)}
+.tmid .tag{margin-right:6px;vertical-align:1px}
+.tamt{text-align:right}.tamt b{font-size:15px}
 .tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:8px;padding:8px 16px calc(8px + env(safe-area-inset-bottom));background:var(--bar);backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);border-top:1px solid var(--line);z-index:20}
 .tabbar button{flex:0 1 200px;border:0;background:none;color:var(--muted);font:inherit;font-size:12px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px;cursor:pointer}
 .tabbar button.on{color:var(--accent)}
@@ -106,101 +115,93 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .seg button{border:0;background:none;padding:11px;border-radius:9px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
 .seg button.on[data-v=Buy]{background:var(--up);color:#fff}
 .seg button.on[data-v=Sell]{background:var(--down);color:#fff}
-.preview{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:13px 14px;border-radius:12px;background:var(--bg)}
-.preview b{font-size:18px}
+.preview{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--bg);display:grid;gap:6px}
+.preview div{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.preview b{font-size:16px}
 .hint{font-size:12px;color:var(--muted);margin-top:6px;min-height:16px}
 .primary{width:100%;margin-top:12px;border:0;border-radius:14px;padding:15px;font:inherit;font-weight:800;font-size:16px;background:var(--accent);color:#fff;cursor:pointer}
 .primary:disabled{opacity:.6}
 .danger{width:100%;margin-top:6px;border:0;background:none;color:var(--down);font:inherit;font-weight:600;padding:12px;cursor:pointer}
-.toast{position:fixed;left:50%;bottom:calc(160px + env(safe-area-inset-bottom));transform:translate(-50%,16px);background:var(--ink);color:var(--card);padding:11px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.22s;z-index:40;pointer-events:none;max-width:90vw}
+.toast{position:fixed;left:50%;bottom:calc(160px + env(safe-area-inset-bottom));transform:translate(-50%,16px);background:var(--ink);color:var(--card);padding:11px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.22s;z-index:60;pointer-events:none;max-width:90vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .skel{height:180px;border-radius:22px;background:linear-gradient(90deg,var(--card),var(--line),var(--card));background-size:200% 100%;animation:sh 1.2s infinite}
 @keyframes sh{to{background-position:-200% 0}}
-.hbtns{display:flex;gap:8px}
 .login{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:24px}
-.login .card{width:100%;max-width:420px;padding:24px}
+.login .card{width:100%;max-width:420px;padding:24px;position:relative}
+.login .lang{position:absolute;top:16px;right:16px}
 .login .logo{width:64px;height:64px;border-radius:18px;margin-bottom:14px}
 .login h3{margin:0 0 6px;font-size:22px}
 .login p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
 .login .err{color:var(--down);font-size:13px;margin-top:8px;min-height:18px}
-.offline{background:var(--downbg);color:var(--down);border-radius:12px;padding:9px 12px;font-size:13px;margin-bottom:12px}
-.tgroups{display:grid;gap:14px}
-@media(min-width:900px){.tgroups{grid-template-columns:1fr 1fr;align-items:start}}
-.tgroup{padding:0;overflow:hidden}
-.thead{display:flex;align-items:center;gap:12px;padding:16px 16px 12px}
-.tname{flex:1;min-width:0}.tname b{display:block;font-size:17px;font-weight:800}.tname span{display:block;font-size:12px;color:var(--muted)}
-.tsum{text-align:right}.tsum b{display:block;font-size:22px;font-weight:800;line-height:1.1}.tsum span{font-size:12px;color:var(--muted)}
-.tgroup .kv{margin:0 16px;padding:12px 0 14px}
-.trows{border-top:1px solid var(--line)}
-.trows .trow{border:0;border-radius:0;border-bottom:1px solid var(--line);background:none;padding:12px 16px}
-.trows .trow:last-child{border-bottom:0}
-.trow .tmid b.up{color:var(--up)}.trow .tmid b.down{color:var(--down)}
-.tmid .tag{margin-right:6px;vertical-align:1px}
-.left{display:inline-block;font-size:12px;font-weight:700;color:var(--ink);background:var(--bg);padding:3px 9px;border-radius:999px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div><h1>我的股票</h1><div class="sub" id="upd">載入中…</div></div>
+    <div><h1 data-i="title">我的股票</h1><div class="sub" id="upd"></div></div>
     <div class="hbtns">
-    <button class="iconbtn" aria-label="設定" onclick="logout()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-    </button>
-    <button class="iconbtn" id="rf" aria-label="更新股價" onclick="load(true)">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
-    </button>
+      <button class="iconbtn lang" onclick="toggleLang()" data-ia="langLabel"></button>
+      <button class="iconbtn" onclick="logout()" data-ia="lockLabel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      </button>
+      <button class="iconbtn" id="rf" onclick="load(true)" data-ia="refreshLabel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+      </button>
     </div>
   </header>
-  <div class="offline" id="offline" hidden>連唔到伺服器，顯示緊上次嘅資料。</div>
-  <div class="demo" id="demo" hidden>示範模式：顯示緊示範數據，唔會影響你嘅真實紀錄。</div>
+  <div class="offline" id="offline" data-i="offline" hidden></div>
+  <div class="demo" id="demo" data-i="demo" hidden></div>
   <section id="v_home"><div class="skel"></div></section>
   <section id="v_trades" hidden></section>
 </div>
 
-<button class="fab" aria-label="新增交易" onclick="openForm()">
+<button class="fab" onclick="openForm()" data-ia="formNew">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
 </button>
 
 <nav class="tabbar">
   <button data-tab="home" class="on" onclick="go('home')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>總覽</button>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i="tabHome"></span></button>
   <button data-tab="trades" onclick="go('trades')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>交易紀錄</button>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span data-i="tabTrades"></span></button>
 </nav>
 
 <div class="overlay" id="ov" onclick="closeForm()"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true">
   <div class="grab"></div>
-  <div class="sheet-head"><h3 id="ftitle">新增交易</h3>
-    <button class="iconbtn" style="width:36px;height:36px" onclick="closeForm()" aria-label="關閉">✕</button></div>
-  <div class="seg" id="seg"><button data-v="Buy" class="on">買入</button><button data-v="Sell">賣出</button></div>
-  <label>股票代號<input id="f_ticker" list="tklist" autocapitalize="characters" autocomplete="off" placeholder="例如 INTC"></label>
+  <div class="sheet-head"><h3 id="ftitle"></h3>
+    <button class="iconbtn" style="width:36px;height:36px" onclick="closeForm()" data-ia="close">✕</button></div>
+  <div class="seg" id="seg"><button data-v="Buy" class="on" data-i="buy"></button><button data-v="Sell" data-i="sell"></button></div>
+  <label><span data-i="ticker"></span><input id="f_ticker" list="tklist" autocapitalize="characters" autocomplete="off" data-ip="tickerPh"></label>
   <datalist id="tklist"></datalist>
   <div class="two">
-    <label>日期<input id="f_date" type="date"></label>
-    <label>股數<input id="f_shares" type="number" inputmode="decimal" step="any" placeholder="50"></label>
+    <label><span data-i="date"></span><input id="f_date" type="date"></label>
+    <label><span data-i="qty"></span><input id="f_shares" type="number" inputmode="decimal" step="any" placeholder="50"></label>
   </div>
   <div class="two">
-    <label>價格 (US$)<input id="f_price" type="number" inputmode="decimal" step="any" placeholder="0.00"></label>
-    <label>佣金 (US$)<input id="f_fee" type="number" inputmode="decimal" step="any" placeholder="7.50"></label>
+    <label><span data-i="priceL"></span><input id="f_price" type="number" inputmode="decimal" step="any" placeholder="0.00"></label>
+    <label><span data-i="feeL"></span><input id="f_fee" type="number" inputmode="decimal" step="any" placeholder="7.50"></label>
   </div>
-  <label>備註<input id="f_note" placeholder="選填"></label>
-  <div class="preview"><span id="f_totlabel">總成本</span><b class="num" id="f_total">US$0.00</b></div>
+  <label><span data-i="note"></span><input id="f_note" data-ip="optional"></label>
+  <div class="preview">
+    <div><span data-i="amount"></span><b class="num" id="f_amt">US$0.00</b></div>
+    <div class="muted"><span data-i="fee"></span><span class="num" id="f_feev">US$0.00</span></div>
+  </div>
   <div class="hint" id="f_hint"></div>
-  <button class="primary" id="f_save" onclick="saveForm()">儲存</button>
-  <button class="danger" id="f_del" onclick="delTrade()" hidden>刪除這筆紀錄</button>
+  <button class="primary" id="f_save" onclick="saveForm()" data-i="save"></button>
+  <button class="danger" id="f_del" onclick="delTrade()" data-i="del" hidden></button>
 </div>
 <div class="toast" id="toast"></div>
 <div class="login" id="login" hidden>
   <div class="card">
+    <button class="iconbtn lang" onclick="toggleLang()" data-ia="langLabel"></button>
     <img class="logo" src="icon-192.png" alt="">
-    <h3>我的股票</h3>
-    <p>請輸入 App 密碼。密碼喺你 Google 試算表「我的股票」嘅「Settings」工作表 B2。只需要輸入一次，呢部機會記住。</p>
-    <label>App 密碼<input id="tok" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false"></label>
+    <h3 data-i="title"></h3>
+    <p data-i="loginText"></p>
+    <label><span data-i="pwd"></span><input id="tok" type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false"></label>
     <div class="err" id="tokerr"></div>
-    <button class="primary" id="tokbtn" onclick="saveToken()">登入</button>
+    <button class="primary" id="tokbtn" onclick="saveToken()" data-i="loginBtn"></button>
   </div>
 </div>
 
@@ -213,6 +214,62 @@ const LS = { get(k){ try { return localStorage.getItem(k); } catch(e){ return nu
              del(k){ try { localStorage.removeItem(k); } catch(e){} } };
 const PAL = ['#3d7a8a','#7d62a8','#e08a2e','#2f6fd6','#d0476b','#2a9d6f','#8a6d3b','#5b6b8c'];
 let S = {trades:[], prices:{}}, tab = 'home', filter = 'ALL', editing = null, ftype = 'Buy', busy = false;
+
+/* ---------- 中英文 ---------- */
+const I18N = {
+  zh: {
+    title:'我的股票', updated:'更新於 {t} · 股價約延遲 15–20 分鐘',
+    offline:'連唔到伺服器，顯示緊上次嘅資料。', demo:'示範模式：顯示緊示範數據，唔會影響你嘅真實紀錄。',
+    mvTotal:'總市值 (US$)', cost:'總成本', latest:'最新變動', realized:'已實現盈虧', fees:'總佣金', fee:'佣金',
+    alloc:'資產分佈', holdingsShort:'持倉', holdings:'持倉', shares:'持股', avg:'平均成本', mv:'市值',
+    unreal:'未實現盈虧', noQuote:'未有報價', noHold:'目前冇持倉',
+    empty:'未有任何紀錄<br><br>按右下角 <b>＋</b> 新增第一筆交易', noRec:'未有紀錄',
+    all:'全部', nTrade1:'1 筆', nTrades:'{n} 筆', nShares:'{n} 股', soldOut:'已全部賣出', avgCost:'平均成本 {p}',
+    buy:'買入', sell:'賣出', tabHome:'總覽', tabTrades:'交易紀錄',
+    formNew:'新增交易', formEdit:'編輯交易', ticker:'股票代號', tickerPh:'例如 INTC', date:'日期', qty:'股數',
+    priceL:'價格 (US$)', feeL:'佣金 (US$)', note:'備註', optional:'選填', amount:'金額', proceeds:'賣出金額',
+    save:'儲存', saving:'儲存中…', del:'刪除這筆紀錄', close:'關閉', held:'目前持有 {n} 股',
+    refreshed:'股價已更新', netErr:'網絡出錯，稍後再試', err:'出錯：', saved:'已儲存 ✓', deleted:'已刪除',
+    saveFail:'儲存失敗：', delFail:'刪除失敗：', needTicker:'請輸入股票代號', needDate:'請揀日期',
+    needPrice:'請輸入價格', needQty:'請輸入股數', tooMany:'賣出股數多過持有（{n} 股）', confirmDel:'確定刪除呢筆紀錄？',
+    loginText:'請輸入 App 密碼。密碼喺你 Google 試算表「我的股票」嘅「Settings」工作表 B2。只需要輸入一次，呢部機會記住。',
+    pwd:'App 密碼', loginBtn:'登入', loggingIn:'登入中…', badPwd:'密碼唔啱，請再輸入', needPwd:'請輸入密碼',
+    connFail:'連唔到伺服器：', loginOk:'登入成功 ✓', confirmLogout:'登出呢部機？（之後要重新輸入 App 密碼）',
+    demoMode:'示範模式', langBtn:'EN', langLabel:'Switch to English', lockLabel:'登出', refreshLabel:'更新股價'
+  },
+  en: {
+    title:'My Stocks', updated:'Updated {t} · prices delayed ~15–20 min',
+    offline:"Can't reach the server — showing your last saved data.", demo:"Demo mode: sample data only, your real records aren't affected.",
+    mvTotal:'Market value (US$)', cost:'Total cost', latest:'Latest change', realized:'Realized P/L', fees:'Total fees', fee:'Fees',
+    alloc:'Allocation', holdingsShort:'Holdings', holdings:'Holdings', shares:'Shares', avg:'Avg cost', mv:'Market value',
+    unreal:'Unrealized P/L', noQuote:'No quote', noHold:'No holdings',
+    empty:'No records yet<br><br>Tap <b>＋</b> to add your first trade', noRec:'No records',
+    all:'All', nTrade1:'1 trade', nTrades:'{n} trades', nShares:'{n} sh', soldOut:'Fully sold', avgCost:'Avg cost {p}',
+    buy:'Buy', sell:'Sell', tabHome:'Overview', tabTrades:'Trades',
+    formNew:'New trade', formEdit:'Edit trade', ticker:'Ticker', tickerPh:'e.g. INTC', date:'Date', qty:'Shares',
+    priceL:'Price (US$)', feeL:'Fees (US$)', note:'Note', optional:'Optional', amount:'Amount', proceeds:'Proceeds',
+    save:'Save', saving:'Saving…', del:'Delete this trade', close:'Close', held:'You hold {n} shares',
+    refreshed:'Prices updated', netErr:'Network error — try again later', err:'Error: ', saved:'Saved ✓', deleted:'Deleted',
+    saveFail:'Save failed: ', delFail:'Delete failed: ', needTicker:'Enter a ticker', needDate:'Pick a date',
+    needPrice:'Enter a price', needQty:'Enter the number of shares', tooMany:'You only hold {n} shares', confirmDel:'Delete this trade?',
+    loginText:'Enter the app password. It’s in cell B2 of the “Settings” tab in your Google Sheet “我的股票”. You only need to enter it once on this device.',
+    pwd:'App password', loginBtn:'Sign in', loggingIn:'Signing in…', badPwd:'Wrong password — try again', needPwd:'Enter the password',
+    connFail:"Can't reach the server: ", loginOk:'Signed in ✓', confirmLogout:"Sign out on this device? You'll need the app password again.",
+    demoMode:'Demo mode', langBtn:'中', langLabel:'切換中文', lockLabel:'Sign out', refreshLabel:'Refresh prices'
+  }
+};
+let LANG = LS.get('mystocks_lang') === 'en' ? 'en' : 'zh';
+function T(k, v){ let s = (I18N[LANG][k] ?? I18N.zh[k] ?? k); if (v) for (const x in v) s = s.replace('{'+x+'}', v[x]); return s; }
+function applyLang(){
+  document.documentElement.lang = LANG === 'en' ? 'en' : 'zh-HK';
+  document.title = T('title');
+  document.querySelectorAll('[data-i]').forEach(e => e.innerHTML = T(e.dataset.i));
+  document.querySelectorAll('[data-ip]').forEach(e => e.placeholder = T(e.dataset.ip));
+  document.querySelectorAll('[data-ia]').forEach(e => e.setAttribute('aria-label', T(e.dataset.ia)));
+  document.querySelectorAll('.lang').forEach(e => e.textContent = T('langBtn'));
+  $('#ftitle').textContent = T(editing ? 'formEdit' : 'formNew');
+}
+function toggleLang(){ LANG = LANG === 'zh' ? 'en' : 'zh'; LS.set('mystocks_lang', LANG); applyLang(); render(); updPreview(); }
 
 /* ---------- 格式 ---------- */
 const nf = (v,a,b) => Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:a,maximumFractionDigits:b});
@@ -230,13 +287,14 @@ const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','
 function dateF(s){ const [y,m,d] = s.split('-').map(Number); return d ? `${d} ${MON[m-1]} ${y}` : s; }
 function today(){ const d = new Date(); return new Date(d - d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
 function color(t){ const ks = [...new Set(S.trades.map(x => x.ticker))].sort(); const i = ks.indexOf(t); return PAL[(i < 0 ? 0 : i) % PAL.length]; }
+const cvars = t => `--c:${color(t)};--ct:${color(t)}1f`;
 function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2400); }
 
 /* ---------- 伺服器 ---------- */
 async function call(fn, ...a){
   if (DEMO_MODE){ await new Promise(r => setTimeout(r, 300)); return demo(fn, ...a); }
   const token = LS.get('mystocks_token');
-  if (!token){ showLogin(); throw new Error('請先登入'); }
+  if (!token){ showLogin(); throw Object.assign(new Error(T('needPwd')), {code:'AUTH'}); }
   const body = { token, action: fn };
   if (fn === 'getData') body.refresh = !!a[0];
   if (fn === 'saveTrade') body.trade = a[0];
@@ -244,7 +302,7 @@ async function call(fn, ...a){
   const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(body), redirect:'follow' });
   const j = await res.json();
   if (!j.ok){
-    if (j.error === 'BAD_TOKEN'){ LS.del('mystocks_token'); showLogin('密碼唔啱，請再輸入'); throw new Error('密碼唔啱'); }
+    if (j.error === 'BAD_TOKEN'){ LS.del('mystocks_token'); showLogin(T('badPwd')); throw Object.assign(new Error(T('badPwd')), {code:'AUTH'}); }
     throw new Error(j.error);
   }
   return j.data;
@@ -252,10 +310,11 @@ async function call(fn, ...a){
 function setData(d){ S = d; if (!DEMO_MODE) LS.set('mystocks_cache', JSON.stringify(d)); render(); }
 async function load(refresh){
   if (busy) return; busy = true; $('#rf').classList.add('spin');
-  try { setData(await call('getData', !!refresh)); $('#offline').hidden = true; if (refresh) toast('股價已更新'); }
+  try { setData(await call('getData', !!refresh)); $('#offline').hidden = true; if (refresh) toast(T('refreshed')); }
   catch(e){
-    if (e instanceof TypeError){ $('#offline').hidden = !S.trades.length; toast('網絡出錯，稍後再試'); }
-    else if (!/登入|密碼/.test(e.message)) toast('出錯：' + (e.message || e));
+    if (e.code === 'AUTH') {}
+    else if (e instanceof TypeError){ $('#offline').hidden = !S.trades.length; toast(T('netErr')); }
+    else toast(T('err') + (e.message || e));
   }
   finally { busy = false; $('#rf').classList.remove('spin'); }
 }
@@ -264,33 +323,33 @@ async function load(refresh){
 function showLogin(msg){ $('#tokerr').textContent = msg || ''; $('#login').hidden = false; }
 async function saveToken(){
   const v = $('#tok').value.trim();
-  if (!v) return showLogin('請輸入密碼');
+  if (!v) return showLogin(T('needPwd'));
   LS.set('mystocks_token', v);
-  const b = $('#tokbtn'); b.disabled = true; b.textContent = '登入中…';
-  try { setData(await call('getData', true)); $('#login').hidden = true; $('#tok').value = ''; toast('登入成功 ✓'); }
-  catch(e){ if (!/密碼/.test(e.message)) showLogin('連唔到伺服器：' + (e.message || e)); }
-  finally { b.disabled = false; b.textContent = '登入'; }
+  const b = $('#tokbtn'); b.disabled = true; b.textContent = T('loggingIn');
+  try { setData(await call('getData', true)); $('#login').hidden = true; $('#tok').value = ''; toast(T('loginOk')); }
+  catch(e){ if (e.code !== 'AUTH') showLogin(T('connFail') + (e.message || e)); }
+  finally { b.disabled = false; b.textContent = T('loginBtn'); }
 }
 function logout(){
-  if (DEMO_MODE) return toast('示範模式');
-  if (!confirm('登出呢部機？（之後要重新輸入 App 密碼）')) return;
+  if (DEMO_MODE) return toast(T('demoMode'));
+  if (!confirm(T('confirmLogout'))) return;
   LS.del('mystocks_token'); LS.del('mystocks_cache');
   S = {trades:[], prices:{}}; render(); showLogin();
 }
 
-/* ---------- 計算（平均成本法，佣金計入成本） ---------- */
+/* ---------- 計算（平均成本法；總成本唔計佣金，佣金另計） ---------- */
 function compute(trades = S.trades){
   const H = {};
-  const ts = [...trades].sort((a,b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  const ts = [...trades].sort((a,b) => a.date.localeCompare(b.date) || String(a.createdAt).localeCompare(String(b.createdAt)));
   for (const t of ts){
     const h = H[t.ticker] || (H[t.ticker] = {ticker:t.ticker, shares:0, cost:0, realized:0, fees:0, count:0});
     h.count++; h.fees += t.fee;
     if (t.type === 'Sell'){
       const avg = h.shares > 0 ? h.cost / h.shares : 0, s = Math.min(t.shares, h.shares);
-      h.realized += t.price * s - t.fee - avg * s;
+      h.realized += (t.price - avg) * s;
       h.cost -= avg * s; h.shares -= s;
       if (h.shares < 1e-9){ h.shares = 0; h.cost = 0; }
-    } else { h.cost += t.price * t.shares + t.fee; h.shares += t.shares; }
+    } else { h.cost += t.price * t.shares; h.shares += t.shares; }
   }
   for (const h of Object.values(H)){
     const p = S.prices[h.ticker] || {};
@@ -310,8 +369,8 @@ function compute(trades = S.trades){
 function go(t){ tab = t; render(); window.scrollTo({top:0}); }
 function render(){
   const H = compute();
-  const u = S.updatedAt ? new Date(S.updatedAt).toLocaleTimeString('zh-HK',{hour:'2-digit',minute:'2-digit'}) : '';
-  $('#upd').textContent = `更新於 ${u} · 股價約延遲 15–20 分鐘`;
+  const u = S.updatedAt ? new Date(S.updatedAt).toLocaleTimeString(LANG === 'en' ? 'en-US' : 'zh-HK',{hour:'2-digit',minute:'2-digit'}) : '—';
+  $('#upd').textContent = T('updated', {t:u});
   $('#demo').hidden = !S.demo;
   renderHome(H); renderTrades(H);
   $('#v_home').hidden = tab !== 'home'; $('#v_trades').hidden = tab !== 'trades';
@@ -326,7 +385,7 @@ function donut(hs, total){
     off += len; return s;
   }).join('');
   return `<svg viewBox="0 0 140 140" width="132" height="132" style="flex-shrink:0"><circle r="${R}" cx="70" cy="70" fill="none" stroke="var(--line)" stroke-width="18"/>${segs}
-    <text x="70" y="66" text-anchor="middle" font-size="11" fill="var(--muted)">持倉</text>
+    <text x="70" y="66" text-anchor="middle" font-size="11" fill="var(--muted)">${T('holdingsShort')}</text>
     <text x="70" y="86" text-anchor="middle" font-size="20" font-weight="800" fill="var(--ink)">${hs.length}</text></svg>`;
 }
 
@@ -340,93 +399,86 @@ function renderHome(H){
   const prevMv = tot.mv - tot.day, dayPct = prevMv ? tot.day / prevMv : 0;
 
   if (!S.trades.length){
-    $('#v_home').innerHTML = `<div class="card empty">未有任何紀錄<br><br>按右下角 <b>＋</b> 新增第一筆交易</div>`; return;
+    $('#v_home').innerHTML = `<div class="card empty">${T('empty')}</div>`; return;
   }
-  const cards = hs.map(h => {
-    const share = tot.mv ? h.mv / tot.mv : 0;
-    return `<div class="card hold" onclick="filter='${esc(h.ticker)}';go('trades')">
-      <div class="head">
+  const cards = hs.map(h => `<div class="card stock hold" style="${cvars(h.ticker)}" onclick="filter='${esc(h.ticker)}';go('trades')">
+      <div class="shead">
         <div class="badge" style="background:${color(h.ticker)}">${esc(sym(h.ticker))}</div>
-        <div style="min-width:0"><div class="name">${esc(sym(h.ticker))}</div><div class="meta ellip">${esc(h.name || '—')}</div></div>
-        <div class="px"><b class="num">${h.hasPrice ? px(h.price) : '—'}</b>
-          <span class="tag ${h.hasPrice ? bg(h.dayPct) : 'bg-flat'} num">${h.hasPrice ? arrow(h.dayPct) + ' ' + pct(h.dayPct) : '未有報價'}</span></div>
+        <div class="sname"><b>${esc(sym(h.ticker))}</b><span class="ellip">${esc(h.name || '—')}</span></div>
+        <div class="sright"><b class="num">${h.hasPrice ? px(h.price) : '—'}</b>
+          <span class="tag ${h.hasPrice ? bg(h.dayPct) : 'bg-flat'} num">${h.hasPrice ? arrow(h.dayPct) + ' ' + pct(h.dayPct) : T('noQuote')}</span></div>
       </div>
       <div class="kv">
-        <div><span>持股</span><b class="num">${sharesF(h.shares)}</b></div>
-        <div><span>平均成本</span><b class="num">${px(h.avg)}</b></div>
-        <div><span>市值</span><b class="num">${money(h.mv)}</b></div>
-        <div><span>總成本</span><b class="num">${money(h.cost)}</b></div>
-        <div><span>今日</span><b class="num ${cls(h.day)}">${signed(h.day)}</b></div>
-        <div><span>佔比</span><b class="num">${(share*100).toFixed(1)}%</b></div>
+        <div><span>${T('shares')}</span><b class="num">${sharesF(h.shares)}</b></div>
+        <div><span>${T('avg')}</span><b class="num">${px(h.avg)}</b></div>
+        <div><span>${T('mv')}</span><b class="num">${money(h.mv)}</b></div>
+        <div><span>${T('cost')}</span><b class="num">${money(h.cost)}</b></div>
+        <div><span>${T('fee')}</span><b class="num">${money(h.fees)}</b></div>
+        <div><span>${T('latest')}</span><b class="num ${cls(h.day)}">${signed(h.day)}</b></div>
       </div>
-      <div class="plbar ${bg(h.pl)}"><span>未實現盈虧</span><b class="num">${signed(h.pl)} (${pct(h.plPct)})</b></div>
-    </div>`;
-  }).join('');
+      <div class="plbar ${bg(h.pl)}"><span>${T('unreal')}</span><b class="num">${signed(h.pl)} (${pct(h.plPct)})</b></div>
+    </div>`).join('');
 
   $('#v_home').innerHTML = `
     <div class="hero">
       <div class="summary">
-        <div class="label">總市值 (US$)</div>
+        <div class="label">${T('mvTotal')}</div>
         <div class="big num">${money(tot.mv)}</div>
         <span class="pill ${cls(pl)} num">${arrow(pl)} ${signed(pl)} · ${pct(plPct)}</span>
         <div class="stats">
-          <div><span>總成本（連佣金）</span><b class="num">${money(tot.cost)}</b></div>
-          <div><span>今日變動</span><b class="num">${signed(tot.day)} (${pct(dayPct)})</b></div>
-          <div><span>已實現盈虧</span><b class="num">${signed(realized)}</b></div>
-          <div><span>總佣金</span><b class="num">${money(fees)}</b></div>
+          <div><span>${T('cost')}</span><b class="num">${money(tot.cost)}</b></div>
+          <div><span>${T('latest')}</span><b class="num">${signed(tot.day)} (${pct(dayPct)})</b></div>
+          <div><span>${T('realized')}</span><b class="num">${signed(realized)}</b></div>
+          <div><span>${T('fees')}</span><b class="num">${money(fees)}</b></div>
         </div>
       </div>
       <div class="card">
-        <div class="ctitle">資產分佈</div>
+        <div class="ctitle">${T('alloc')}</div>
         <div class="alloc">${donut(hs, tot.mv)}
           <div class="legend">${hs.map(h => `<div class="row"><i class="dot" style="background:${color(h.ticker)}"></i><b>${esc(sym(h.ticker))}</b><span class="muted num" style="margin-left:auto">${tot.mv ? (h.mv/tot.mv*100).toFixed(1) : 0}%</span></div>`).join('') || '<span class="muted">—</span>'}</div>
         </div>
       </div>
     </div>
-    <h2>持倉</h2>
-    <div class="grid">${cards || '<div class="card empty">目前冇持倉</div>'}</div>`;
+    <h2>${T('holdings')}</h2>
+    <div class="grid">${cards || `<div class="card empty">${T('noHold')}</div>`}</div>`;
 }
 
 function renderTrades(H){
   const tks = [...new Set(S.trades.map(t => t.ticker))].sort();
   if (filter !== 'ALL' && !tks.includes(filter)) filter = 'ALL';
-  // 每筆交易之後仲有幾多股（好似記錄表嘅 Shares Left）
-  const run = {}, left = {};
-  [...S.trades].sort((a,b) => a.date.localeCompare(b.date) || String(a.createdAt).localeCompare(String(b.createdAt)))
-    .forEach(t => { run[t.ticker] = Math.max(0, (run[t.ticker] || 0) + (t.type === 'Sell' ? -t.shares : t.shares)); left[t.id] = run[t.ticker]; });
-  const chips = ['ALL', ...tks].map(k => `<button class="chip ${filter===k?'on':''}" onclick="filter='${esc(k)}';render()">${k==='ALL'?'全部':esc(sym(k))}</button>`).join('');
+  const chips = ['ALL', ...tks].map(k => `<button class="chip ${filter===k?'on':''}" onclick="filter='${esc(k)}';render()">${k==='ALL'?T('all'):esc(sym(k))}</button>`).join('');
   const show = filter === 'ALL' ? tks : [filter];
   const groups = show.map(k => {
-    const h = H[k] || {shares:0, avg:0, cost:0, mv:0, pl:0, plPct:0, realized:0, name:''};
+    const h = H[k] || {shares:0, avg:0, cost:0, mv:0, pl:0, plPct:0, realized:0, fees:0, name:''};
     const list = S.trades.filter(t => t.ticker === k)
       .sort((a,b) => b.date.localeCompare(a.date) || String(b.createdAt).localeCompare(String(a.createdAt)));
     const rows = list.map(t => {
       const sell = t.type === 'Sell';
-      const amt = sell ? t.price*t.shares - t.fee : t.price*t.shares + t.fee;
       return `<button class="trow" onclick="openForm('${esc(t.id)}')">
-        <div class="tmid"><b class="num ${sell?'down':'up'}">${sell?'−':'+'}${sharesF(t.shares)} 股 @ ${px(t.price)}</b>
-          <span><i class="tag ${sell?'bg-down':'bg-up'}" style="font-style:normal">${sell?'賣出':'買入'}</i>${dateF(t.date)} · 佣金 ${money(t.fee)}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
-        <div class="tamt"><b class="num">${money(amt)}</b><span class="left num">持股 ${sharesF(left[t.id])}</span></div>
+        <div class="tmid"><b class="num ${sell?'down':'up'}">${sell?'−':'+'}${T('nShares',{n:sharesF(t.shares)})} @ ${px(t.price)}</b>
+          <span><i class="tag ${sell?'bg-down':'bg-up'}">${T(sell?'sell':'buy')}</i>${dateF(t.date)} · ${T('fee')} ${money(t.fee)}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
+        <div class="tamt"><b class="num">${money(t.price*t.shares)}</b></div>
       </button>`;
     }).join('');
     const closed = h.shares <= 0;
-    return `<section class="card tgroup">
-      <div class="thead">
+    return `<section class="card stock" style="${cvars(k)}">
+      <div class="shead">
         <div class="badge" style="background:${color(k)}">${esc(sym(k))}</div>
-        <div class="tname"><b>${esc(sym(k))}</b><span class="ellip">${esc(h.name || '—')} · ${list.length} 筆</span></div>
-        <div class="tsum"><b class="num">${sharesF(h.shares)} 股</b><span class="num">${closed ? '已全部賣出' : '平均成本 ' + px(h.avg)}</span></div>
+        <div class="sname"><b>${esc(sym(k))}</b><span class="ellip">${esc(h.name || '—')} · ${T(list.length === 1 ? 'nTrade1' : 'nTrades',{n:list.length})}</span></div>
+        <div class="sright"><b class="num">${T('nShares',{n:sharesF(h.shares)})}</b><span class="num">${closed ? T('soldOut') : T('avgCost',{p:px(h.avg)})}</span></div>
       </div>
-      <div class="kv">
-        <div><span>總成本（連佣金）</span><b class="num">${money(h.cost)}</b></div>
-        <div><span>市值</span><b class="num">${money(h.mv)}</b></div>
+      <div class="kv k2">
+        <div><span>${T('cost')}</span><b class="num">${money(h.cost)}</b></div>
+        <div><span>${T('fee')}</span><b class="num">${money(h.fees)}</b></div>
+        <div><span>${T('mv')}</span><b class="num">${money(h.mv)}</b></div>
         ${closed
-          ? `<div><span>已實現盈虧</span><b class="num ${cls(h.realized)}">${signed(h.realized)}</b></div>`
-          : `<div><span>未實現盈虧</span><b class="num ${cls(h.pl)}">${signed(h.pl)} <small>(${pct(h.plPct)})</small></b></div>`}
+          ? `<div><span>${T('realized')}</span><b class="num ${cls(h.realized)}">${signed(h.realized)}</b></div>`
+          : `<div><span>${T('unreal')}</span><b class="num ${cls(h.pl)}">${signed(h.pl)} <small>(${pct(h.plPct)})</small></b></div>`}
       </div>
       <div class="trows">${rows}</div>
     </section>`;
   }).join('');
-  $('#v_trades').innerHTML = `<div class="chips">${chips}</div><div class="tgroups">${groups || '<div class="card empty">未有紀錄</div>'}</div>`;
+  $('#v_trades').innerHTML = `<div class="chips">${chips}</div><div class="tgroups">${groups || `<div class="card empty">${T('noRec')}</div>`}</div>`;
 }
 
 /* ---------- 表格 ---------- */
@@ -445,15 +497,16 @@ function heldShares(ticker){
 function updPreview(){
   const p = +$('#f_price').value || 0, s = +$('#f_shares').value || 0, f = +$('#f_fee').value || 0;
   const sell = ftype === 'Sell';
-  $('#f_totlabel').textContent = sell ? '實收金額（扣佣金）' : '總成本（連佣金）';
-  $('#f_total').textContent = money(sell ? p*s - f : p*s + f);
+  $('[data-i=amount]').textContent = T(sell ? 'proceeds' : 'amount');
+  $('#f_amt').textContent = money(p*s);
+  $('#f_feev').textContent = money(f);
   const tk = $('#f_ticker').value.trim().toUpperCase();
-  $('#f_hint').textContent = sell && tk ? `目前持有 ${sharesF(heldShares(tk))} 股` : '';
+  $('#f_hint').textContent = sell && tk ? T('held',{n:sharesF(heldShares(tk))}) : '';
 }
 function openForm(id){
   editing = id ? S.trades.find(t => t.id === id) : null;
   const t = editing || {type:'Buy', ticker: filter !== 'ALL' ? filter : '', date: today(), price:'', shares:'', fee: lastFee(), note:''};
-  $('#ftitle').textContent = editing ? '編輯交易' : '新增交易';
+  $('#ftitle').textContent = T(editing ? 'formEdit' : 'formNew');
   $('#f_ticker').value = t.ticker; $('#f_date').value = t.date; $('#f_price').value = t.price;
   $('#f_shares').value = t.shares; $('#f_fee').value = t.fee; $('#f_note').value = t.note || '';
   $('#tklist').innerHTML = [...new Set(S.trades.map(x => x.ticker))].map(k => `<option value="${esc(k)}">`).join('');
@@ -470,23 +523,23 @@ async function saveForm(){
     price: +$('#f_price').value, shares: +$('#f_shares').value,
     fee: +($('#f_fee').value || 0), note: $('#f_note').value.trim()
   };
-  if (!t.ticker) return toast('請輸入股票代號');
-  if (!t.date) return toast('請揀日期');
-  if (!(t.price > 0)) return toast('請輸入價格');
-  if (!(t.shares > 0)) return toast('請輸入股數');
-  if (t.type === 'Sell'){ const held = heldShares(t.ticker); if (t.shares > held + 1e-9) return toast(`賣出股數多過持有（${sharesF(held)} 股）`); }
-  const b = $('#f_save'); b.disabled = true; b.textContent = '儲存中…';
-  try { setData(await call('saveTrade', t)); closeForm(); toast('已儲存 ✓'); }
-  catch(e){ toast('儲存失敗：' + (e.message || e)); }
-  finally { b.disabled = false; b.textContent = '儲存'; }
+  if (!t.ticker) return toast(T('needTicker'));
+  if (!t.date) return toast(T('needDate'));
+  if (!(t.price > 0)) return toast(T('needPrice'));
+  if (!(t.shares > 0)) return toast(T('needQty'));
+  if (t.type === 'Sell'){ const held = heldShares(t.ticker); if (t.shares > held + 1e-9) return toast(T('tooMany',{n:sharesF(held)})); }
+  const b = $('#f_save'); b.disabled = true; b.textContent = T('saving');
+  try { setData(await call('saveTrade', t)); closeForm(); toast(T('saved')); }
+  catch(e){ if (e.code !== 'AUTH') toast(T('saveFail') + (e.message || e)); }
+  finally { b.disabled = false; b.textContent = T('save'); }
 }
 async function delTrade(){
-  if (!editing || !confirm('確定刪除呢筆紀錄？')) return;
-  try { setData(await call('deleteTrade', editing.id)); closeForm(); toast('已刪除'); }
-  catch(e){ toast('刪除失敗：' + (e.message || e)); }
+  if (!editing || !confirm(T('confirmDel'))) return;
+  try { setData(await call('deleteTrade', editing.id)); closeForm(); toast(T('deleted')); }
+  catch(e){ if (e.code !== 'AUTH') toast(T('delFail') + (e.message || e)); }
 }
 
-/* ---------- 預覽用示範數據 ---------- */
+/* ---------- 示範數據 ---------- */
 const DEMO = {
   trades: [
     {id:'d1',date:'2026-10-20',ticker:'INTC',type:'Buy',price:89,shares:50,fee:7.5,note:'',createdAt:'2026-10-20T01'},
@@ -508,6 +561,7 @@ function demo(fn, a){
 
 /* ---------- 啟動 ---------- */
 (function start(){
+  applyLang();
   const cached = LS.get('mystocks_cache');
   if (!DEMO_MODE && cached){ try { S = JSON.parse(cached); render(); } catch(e){} }
   if (!DEMO_MODE && !LS.get('mystocks_token')){ render(); showLogin(); }
