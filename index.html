@@ -89,8 +89,8 @@ header h1{font-size:28px;margin:0;font-weight:800;letter-spacing:.01em}
 .bigpl{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:14px;font-size:17px;font-weight:700}
 .bigpl b{font-size:22px;font-weight:800}
 .bigpl span{font-size:15px;opacity:.9}
-.bigpl.up{background:rgba(52,192,138,.2);color:#b9f0d8}
-.bigpl.down{background:rgba(240,107,98,.22);color:#ffd2ce}
+.bigpl.up{background:#1d7a55;color:#e6fff3}
+.bigpl.down{background:#b8372f;color:#fff0ee}
 .rcpt{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:6px 16px 12px}
 .rcpt .r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:16px;color:var(--heroMuted)}
 .rcpt .r b{font-size:19px;font-weight:800;color:var(--heroInk)}
@@ -271,6 +271,7 @@ input:focus{border-color:var(--accent)}
   <div class="preview">
     <div><span data-i="amount"></span><b class="num" id="f_amt">$0.00</b></div>
     <div style="color:var(--muted)"><span data-i="fee"></span><span class="num" id="f_feev">$0.00</span></div>
+    <div style="color:var(--muted)" id="f_secrow" hidden><span data-i="secFeeL"></span><span class="num" id="f_secv">$0.00</span></div>
   </div>
   <div class="hint" id="f_hint"></div>
   <button class="primary" id="f_save" onclick="saveForm()" data-i="save"></button>
@@ -296,6 +297,9 @@ const DEMO_MODE = new URLSearchParams(location.search).has('demo');
 const LS = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
              set(k,v){ try { localStorage.setItem(k,v); } catch(e){} },
              del(k){ try { localStorage.removeItem(k); } catch(e){} } };
+// 賣出時嘅 SEC 費：成交金額 × 0.00206%（向上捨入到 1 仙）
+const SEC_RATE = 0.0000206;
+const secFee = t => t.type === 'Sell' ? Math.ceil(t.price * t.shares * SEC_RATE * 100 - 1e-9) / 100 : 0;
 const PAL = ['#2a7f8f','#7b5ea7','#d98324','#3466c2','#c2416b','#2e9b6e','#8a6d3b','#5b6b8c'];
 let S = {trades:[], prices:{}}, tab = 'home', filter = 'ALL', editing = null, ftype = 'Buy', busy = false;
 
@@ -304,8 +308,8 @@ const I18N = {
   zh: {
     title:'我的股票', updated:'更新於 {t}，股價約延遲 15–20 分鐘',
     offline:'連唔到伺服器，顯示緊上次嘅資料。', demo:'示範模式：顯示緊示範數據，唔會影響你嘅真實紀錄。',
-    mvTotal:'總市值', cost:'總成本', realized:'已實現盈虧', fees:'總佣金', fee:'佣金', costVsValue:'成本對比市值',
-    alloc:'資產分佈', gainL:'賺咗', lossL:'蝕咗', buyCost:'買入成本', nowValue:'而家值', feeExtra:'佣金（另外俾咗）', split:'各股佔比', holdings:'持倉', nStocks:'{n} 隻股票', shares:'持股', avg:'平均成本', mv:'市值',
+    mvTotal:'總市值', cost:'總成本', realized:'已實現盈虧', fees:'總佣金', fee:'佣金', secFee:'SEC 費', secFeeL:'SEC 費（0.00206%）', costVsValue:'成本對比市值',
+    alloc:'資產分佈', gainL:'賺咗', lossL:'蝕咗', buyCost:'買入成本', nowValue:'而家值', feeExtra:'佣金及費用（另外俾咗）', split:'各股佔比', holdings:'持倉', nStocks:'{n} 隻股票', shares:'持股', avg:'平均成本', mv:'市值',
     unreal:'盈虧', nowPrice:'即時股價', delayNote:'股價約延遲 15–20 分鐘', noQuote:'未有報價', noHold:'目前冇持倉',
     empty:'未有任何紀錄<br><br>按 <b>＋</b> 新增第一筆交易', noRec:'未有紀錄',
     all:'全部', nTrade1:'1 次', nTrades:'{n} 次', nShares:'{n} 股', soldOut:'已全部賣出',
@@ -324,8 +328,8 @@ const I18N = {
   en: {
     title:'My Stocks', updated:'Updated {t}, prices delayed ~15–20 min',
     offline:"Can't reach the server — showing your last saved data.", demo:"Demo mode: sample data only, your real records aren't affected.",
-    mvTotal:'Market value', cost:'Total cost', realized:'Realized P/L', fees:'Total fees', fee:'Fees', costVsValue:'Cost vs value',
-    alloc:'Allocation', gainL:'Gain', lossL:'Loss', buyCost:'You paid', nowValue:'Worth now', feeExtra:'Fees (paid separately)', split:'Split', holdings:'Holdings', nStocks:'{n} stocks', shares:'Shares', avg:'Avg cost', mv:'Market value',
+    mvTotal:'Market value', cost:'Total cost', realized:'Realized P/L', fees:'Total fees', fee:'Fees', secFee:'SEC fee', secFeeL:'SEC fee (0.00206%)', costVsValue:'Cost vs value',
+    alloc:'Allocation', gainL:'Gain', lossL:'Loss', buyCost:'You paid', nowValue:'Worth now', feeExtra:'Fees & charges (paid separately)', split:'Split', holdings:'Holdings', nStocks:'{n} stocks', shares:'Shares', avg:'Avg cost', mv:'Market value',
     unreal:'P/L', nowPrice:'Live price', delayNote:'Prices delayed ~15–20 min', noQuote:'No quote', noHold:'No holdings',
     empty:'No records yet<br><br>Tap <b>＋</b> to add your first trade', noRec:'No records',
     all:'All', nTrade1:'1 trade', nTrades:'{n} trades', nShares:'{n} sh', soldOut:'Fully sold',
@@ -426,7 +430,7 @@ function compute(trades = S.trades){
   const ts = [...trades].sort((a,b) => a.date.localeCompare(b.date) || String(a.createdAt).localeCompare(String(b.createdAt)));
   for (const t of ts){
     const h = H[t.ticker] || (H[t.ticker] = {ticker:t.ticker, shares:0, cost:0, realized:0, fees:0, count:0});
-    h.count++; h.fees += t.fee;
+    h.count++; h.fees += t.fee + secFee(t);
     if (t.type === 'Sell'){
       const avg = h.shares > 0 ? h.cost / h.shares : 0, s = Math.min(t.shares, h.shares);
       h.realized += (t.price - avg) * s;
@@ -536,7 +540,7 @@ function renderTrades(H){
       return `<button class="trow" onclick="openForm('${esc(t.id)}')">
         <div class="tdot ${sell?'bg-down':'bg-up'}">${sell?'−':'+'}</div>
         <div class="tmid"><b class="num">${T(sell?'sell':'buy')} ${T('nShares',{n:sharesF(t.shares)})} @ ${px(t.price)}</b>
-          <span>${dateF(t.date)} · ${T('fee')} ${money(t.fee)}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
+          <span>${dateF(t.date)} · ${T('fee')} ${money(t.fee)}${sell ? ' · ' + T('secFee') + ' ' + money(secFee(t)) : ''}${t.note ? ' · ' + esc(t.note) : ''}</span></div>
         <div class="tamt num">${money(t.price*t.shares)}</div>
       </button>`;
     }).join('');
@@ -582,6 +586,8 @@ function updPreview(){
   $('[data-i=amount]').textContent = T(sell ? 'proceeds' : 'amount');
   $('#f_amt').textContent = money(p*s);
   $('#f_feev').textContent = money(f);
+  $('#f_secrow').hidden = !sell;
+  $('#f_secv').textContent = money(secFee({type:ftype, price:p, shares:s}));
   const tk = $('#f_ticker').value.trim().toUpperCase();
   $('#f_hint').textContent = sell && tk ? T('held',{n:sharesF(heldShares(tk))}) : '';
 }
