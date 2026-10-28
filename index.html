@@ -60,7 +60,7 @@ header h1{font-size:28px;margin:0;font-weight:800;letter-spacing:.01em}
   display:grid;gap:22px}
 .hero::before{content:'';position:absolute;right:-80px;top:-120px;width:320px;height:320px;border-radius:50%;
   background:radial-gradient(closest-side,var(--hero2),transparent);pointer-events:none}
-@media(min-width:820px){.hero{grid-template-columns:1.15fr 1fr;padding:28px;gap:36px;align-items:end}}
+@media(min-width:820px){.hero{grid-template-columns:1fr 1fr;padding:28px;gap:36px;align-items:center}}
 .hero > *{position:relative}
 .hlabel{font-size:13px;color:var(--heroMuted)}
 .hvalue{font-size:clamp(38px,9vw,52px);font-weight:800;line-height:1.05;margin:4px 0 14px;letter-spacing:-.03em}
@@ -84,6 +84,27 @@ header h1{font-size:28px;margin:0;font-weight:800;letter-spacing:.01em}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
 .legend b{color:var(--heroInk);font-weight:700}
+
+/* 收據式總覽 */
+.bigpl{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:14px;font-size:17px;font-weight:700}
+.bigpl b{font-size:22px;font-weight:800}
+.bigpl span{font-size:15px;opacity:.9}
+.bigpl.up{background:rgba(52,192,138,.2);color:#b9f0d8}
+.bigpl.down{background:rgba(240,107,98,.22);color:#ffd2ce}
+.rcpt{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:6px 16px 12px}
+.rcpt .r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:16px;color:var(--heroMuted)}
+.rcpt .r b{font-size:19px;font-weight:800;color:var(--heroInk)}
+.rcpt .r.total{border-bottom:0;border-top:1.5px solid rgba(255,255,255,.35);margin-top:-1px}
+.rcpt .r.total span{font-weight:700}
+.rcpt .r.total b{font-size:22px}
+.rcpt .r.total.up span,.rcpt .r.total.up b{color:#7ee2b8}
+.rcpt .r.total.down span,.rcpt .r.total.down b{color:#ff9d95}
+.rcpt .r.small{font-size:14px;padding:8px 0;border-bottom:0}
+.rcpt .r.small b{font-size:15px;font-weight:700}
+.split{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;padding-top:10px;margin-top:4px;border-top:1px solid rgba(255,255,255,.1);font-size:14px;color:var(--heroInk)}
+.split .lbl{color:var(--heroMuted)}
+.split span{display:inline-flex;align-items:center;gap:6px}
+.split i{width:10px;height:10px;border-radius:50%;display:inline-block}
 
 /* 區塊標題 */
 .shead-row{display:flex;align-items:baseline;justify-content:space-between;margin:28px 2px 12px}
@@ -138,7 +159,22 @@ header h1{font-size:28px;margin:0;font-weight:800;letter-spacing:.01em}
 .dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;z-index:20}
 .tabbar{display:flex;gap:4px;padding:5px;border-radius:999px;background:var(--glass);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);box-shadow:0 10px 30px -10px rgba(16,40,43,.35);border:1px solid var(--line)}
 .tabbar button{border:0;background:none;color:var(--muted);font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;padding:11px 16px;white-space:nowrap;border-radius:999px;cursor:pointer}
-.tabbar button.on{background:var(--ink);color:var(--paper)}
+.tabbar{position:relative}
+.tabbar .ind{position:absolute;top:5px;bottom:5px;left:0;width:0;border-radius:999px;background:var(--ink);transition:transform .34s cubic-bezier(.3,.9,.3,1.12),width .34s cubic-bezier(.3,.9,.3,1.12);z-index:0}
+.tabbar button{position:relative;z-index:1;transition:color .25s}
+.tabbar button.on{color:var(--paper)}
+/* 切換畫面動畫 */
+@keyframes inR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.anim-r{animation:inR .34s cubic-bezier(.2,.8,.2,1)}
+.anim-l{animation:inL .34s cubic-bezier(.2,.8,.2,1)}
+.anim-r .stock,.anim-l .stock,.anim-l .hero{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.anim-r .stock:nth-child(2),.anim-l .grid .stock:nth-child(1){animation-delay:.06s}
+.anim-r .stock:nth-child(3),.anim-l .grid .stock:nth-child(2){animation-delay:.12s}
+.anim-r .stock:nth-child(4),.anim-l .grid .stock:nth-child(3){animation-delay:.18s}
+.anim-l .grid .stock:nth-child(n+4){animation-delay:.24s}
+@media (prefers-reduced-motion:reduce){.anim-r,.anim-l,.anim-r .stock,.anim-l .stock,.anim-l .hero{animation:none}.tabbar .ind{transition:none}}
 .fab{width:54px;height:54px;border-radius:50%;border:0;background:var(--live);color:#fff;box-shadow:0 10px 24px -6px rgba(224,122,16,.55);cursor:pointer;display:grid;place-items:center}
 
 /* 表格 */
@@ -204,7 +240,7 @@ input:focus{border-color:var(--accent)}
 </div>
 
 <div class="dock">
-  <nav class="tabbar">
+  <nav class="tabbar"><span class="ind"></span>
     <button data-tab="home" class="on" onclick="go('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span data-i="tabHome"></span></button>
     <button data-tab="trades" onclick="go('trades')">
@@ -269,7 +305,7 @@ const I18N = {
     title:'我的股票', updated:'更新於 {t}，股價約延遲 15–20 分鐘',
     offline:'連唔到伺服器，顯示緊上次嘅資料。', demo:'示範模式：顯示緊示範數據，唔會影響你嘅真實紀錄。',
     mvTotal:'總市值', cost:'總成本', realized:'已實現盈虧', fees:'總佣金', fee:'佣金', costVsValue:'成本對比市值',
-    alloc:'資產分佈', gainL:'賺咗', lossL:'蝕咗', holdings:'持倉', nStocks:'{n} 隻股票', shares:'持股', avg:'平均成本', mv:'市值',
+    alloc:'資產分佈', gainL:'賺咗', lossL:'蝕咗', buyCost:'買入成本', nowValue:'而家值', feeExtra:'佣金（另外俾咗）', split:'各股佔比', holdings:'持倉', nStocks:'{n} 隻股票', shares:'持股', avg:'平均成本', mv:'市值',
     unreal:'盈虧', nowPrice:'即時股價', delayNote:'股價約延遲 15–20 分鐘', noQuote:'未有報價', noHold:'目前冇持倉',
     empty:'未有任何紀錄<br><br>按 <b>＋</b> 新增第一筆交易', noRec:'未有紀錄',
     all:'全部', nTrade1:'1 次', nTrades:'{n} 次', nShares:'{n} 股', soldOut:'已全部賣出',
@@ -289,7 +325,7 @@ const I18N = {
     title:'My Stocks', updated:'Updated {t}, prices delayed ~15–20 min',
     offline:"Can't reach the server — showing your last saved data.", demo:"Demo mode: sample data only, your real records aren't affected.",
     mvTotal:'Market value', cost:'Total cost', realized:'Realized P/L', fees:'Total fees', fee:'Fees', costVsValue:'Cost vs value',
-    alloc:'Allocation', gainL:'Gain', lossL:'Loss', holdings:'Holdings', nStocks:'{n} stocks', shares:'Shares', avg:'Avg cost', mv:'Market value',
+    alloc:'Allocation', gainL:'Gain', lossL:'Loss', buyCost:'You paid', nowValue:'Worth now', feeExtra:'Fees (paid separately)', split:'Split', holdings:'Holdings', nStocks:'{n} stocks', shares:'Shares', avg:'Avg cost', mv:'Market value',
     unreal:'P/L', nowPrice:'Live price', delayNote:'Prices delayed ~15–20 min', noQuote:'No quote', noHold:'No holdings',
     empty:'No records yet<br><br>Tap <b>＋</b> to add your first trade', noRec:'No records',
     all:'All', nTrade1:'1 trade', nTrades:'{n} trades', nShares:'{n} sh', soldOut:'Fully sold',
@@ -410,7 +446,16 @@ function compute(trades = S.trades){
 }
 
 /* ---------- 畫面 ---------- */
-function go(t){ tab = t; render(); window.scrollTo({top:0}); }
+function go(t){
+  const prev = tab; tab = t; render(); window.scrollTo({top:0});
+  if (prev !== t){ const el = $('#v_' + t); el.classList.remove('anim-r','anim-l'); void el.offsetWidth; el.classList.add(t === 'trades' ? 'anim-r' : 'anim-l'); }
+}
+function moveInd(){
+  const b = $('.tabbar button.on'), ind = $('.tabbar .ind'); if (!b || !ind) return;
+  ind.style.width = b.offsetWidth + 'px'; ind.style.transform = `translateX(${b.offsetLeft}px)`;
+}
+window.addEventListener('resize', moveInd);
+if (document.fonts) document.fonts.ready.then(moveInd);
 function render(){
   const H = compute();
   const u = S.updatedAt ? new Date(S.updatedAt).toLocaleTimeString(LANG === 'en' ? 'en-US' : 'zh-HK',{hour:'2-digit',minute:'2-digit'}) : '—';
@@ -419,6 +464,7 @@ function render(){
   renderHome(H); renderTrades(H);
   $('#v_home').hidden = tab !== 'home'; $('#v_trades').hidden = tab !== 'trades';
   document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  moveInd();
 }
 
 const liveTag = h => h.hasPrice
@@ -436,15 +482,9 @@ function renderHome(H){
   if (!S.trades.length){
     $('#v_home').innerHTML = `<div class="empty">${T('empty')}</div>`; return;
   }
-  // 成本 vs 市值 長條：灰色＝成本，綠色＝賺咗嘅部分，紅色斜紋＝蝕咗嘅部分
-  const big = Math.max(tot.cost, tot.mv) || 1;
-  const costW = Math.min(tot.cost, tot.mv) / big * 100, diffW = Math.abs(pl) / big * 100;
-  const cvBar = pl >= 0
-    ? `<i class="seg-cost" style="width:${costW}%"></i><i class="seg-gain" style="width:${diffW}%"></i>`
-    : `<i class="seg-cost" style="width:${costW}%"></i><i class="seg-loss" style="width:${diffW}%"></i>`;
-  const allocBar = hs.map(h => `<i style="width:${tot.mv ? h.mv/tot.mv*100 : 0}%;background:${color(h.ticker)}"></i>`).join('');
-  const allocLegend = hs.map(h => `<span><i style="background:${color(h.ticker)}"></i><b>${esc(sym(h.ticker))}</b><span class="num">${tot.mv ? (h.mv/tot.mv*100).toFixed(1) : 0}%</span></span>`).join('');
   const hasRealized = Math.abs(realized) > 0.0049;
+  const gain = pl >= 0;
+  const split = hs.map(h => `<span><i style="background:${color(h.ticker)}"></i>${esc(sym(h.ticker))} <b class="num">${tot.mv ? Math.round(h.mv/tot.mv*100) : 0}%</b></span>`).join('');
 
   const cards = hs.map(h => `<button class="stock hold" style="--c:${color(h.ticker)}" onclick="filter='${esc(h.ticker)}';go('trades')">
       <div class="stop">
@@ -467,19 +507,15 @@ function renderHome(H){
       <div>
         <div class="hlabel">${T('mvTotal')}</div>
         <div class="hvalue num">${money(tot.mv)}</div>
-        <span class="plchip ${cls(pl)}"><span class="t">${T('unreal')}</span><span class="num">${arrow(pl)} ${signed(pl)}</span><span class="num p">${pct(plPct)}</span></span>
+        <div class="bigpl ${gain ? 'up' : 'down'}">${T(gain ? 'gainL' : 'lossL')} <b class="num">${money(Math.abs(pl))}</b> <span class="num">(${pct(plPct)})</span></div>
       </div>
-      <div class="bars">
-        <div>
-          <div class="blabel"><span>${T('cost')} <b class="num">${money(tot.cost)}</b></span><span>${T('fees')} <b class="num">${money(fees)}</b></span></div>
-          <div class="track" title="${T('costVsValue')}">${cvBar}</div>
-          <div class="legend"><span><i style="background:rgba(255,255,255,.55)"></i>${T('cost')}</span><span><i style="background:${pl >= 0 ? '#46d39b' : '#f06b62'}"></i>${T(pl >= 0 ? 'gainL' : 'lossL')} <b class="num">${money(Math.abs(pl))}</b></span></div>
-        </div>
-        <div>
-          <div class="blabel"><span>${T('alloc')}</span>${hasRealized ? `<span>${T('realized')} <b class="num">${signed(realized)}</b></span>` : ''}</div>
-          <div class="track">${allocBar}</div>
-          <div class="legend">${allocLegend}</div>
-        </div>
+      <div class="rcpt">
+        <div class="r"><span>${T('buyCost')}</span><b class="num">${money(tot.cost)}</b></div>
+        <div class="r"><span>${T('nowValue')}</span><b class="num">${money(tot.mv)}</b></div>
+        <div class="r total ${gain ? 'up' : 'down'}"><span>${T(gain ? 'gainL' : 'lossL')}</span><b class="num">${gain ? '+' : '−'}${money(Math.abs(pl))}</b></div>
+        <div class="r small"><span>${T('feeExtra')}</span><b class="num">${money(fees)}</b></div>
+        ${hasRealized ? `<div class="r small"><span>${T('realized')}</span><b class="num">${signed(realized)}</b></div>` : ''}
+        <div class="split"><span class="lbl">${T('split')}</span>${split}</div>
       </div>
     </div>
     <div class="shead-row"><h2>${T('holdings')}</h2><span>${T('nStocks',{n:hs.length})}</span></div>
