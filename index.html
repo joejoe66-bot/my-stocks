@@ -414,7 +414,6 @@ function renderHome(H){
         <div><span>${T('mv')}</span><b class="num">${money(h.mv)}</b></div>
         <div><span>${T('cost')}</span><b class="num">${money(h.cost)}</b></div>
         <div><span>${T('fee')}</span><b class="num">${money(h.fees)}</b></div>
-        <div><span>${T('latest')}</span><b class="num ${cls(h.day)}">${signed(h.day)}</b></div>
       </div>
       <div class="plbar ${bg(h.pl)}"><span>${T('unreal')}</span><b class="num">${signed(h.pl)} (${pct(h.plPct)})</b></div>
     </div>`).join('');
@@ -427,7 +426,6 @@ function renderHome(H){
         <span class="pill ${cls(pl)} num">${arrow(pl)} ${signed(pl)} · ${pct(plPct)}</span>
         <div class="stats">
           <div><span>${T('cost')}</span><b class="num">${money(tot.cost)}</b></div>
-          <div><span>${T('latest')}</span><b class="num">${signed(tot.day)} (${pct(dayPct)})</b></div>
           <div><span>${T('realized')}</span><b class="num">${signed(realized)}</b></div>
           <div><span>${T('fees')}</span><b class="num">${money(fees)}</b></div>
         </div>

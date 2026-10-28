@@ -1,5 +1,5 @@
 // 我的股票 — Service Worker：快取 App 外殼，離線都開到；股價 API 唔快取
-const CACHE = 'mystocks-v1';
+const CACHE = 'mystocks-v2';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -12,9 +12,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-  // 先試網絡（有更新就攞新版），失敗先用快取
+  // 先試網絡（每次都同伺服器核對有冇新版），失敗先用快取
   e.respondWith(
-    fetch(req).then(res => {
+    fetch(req.url, { cache: 'no-cache' }).then(res => {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(req, copy));
       return res;
