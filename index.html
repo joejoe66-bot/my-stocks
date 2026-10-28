@@ -463,15 +463,17 @@ function renderTrades(H){
       <div class="shead">
         <div class="badge" style="background:${color(k)}">${esc(sym(k))}</div>
         <div class="sname"><b>${esc(sym(k))}</b><span class="ellip">${esc(h.name || '—')} · ${T(list.length === 1 ? 'nTrade1' : 'nTrades',{n:list.length})}</span></div>
-        <div class="sright"><b class="num">${T('nShares',{n:sharesF(h.shares)})}</b><span class="num">${closed ? T('soldOut') : T('avgCost',{p:px(h.avg)})}</span></div>
+        <div class="sright"><b class="num">${T('nShares',{n:sharesF(h.shares)})}</b>${closed ? `<span>${T('soldOut')}</span>` : ''}</div>
       </div>
-      <div class="kv k2">
-        <div><span>${T('cost')}</span><b class="num">${money(h.cost)}</b></div>
-        <div><span>${T('fee')}</span><b class="num">${money(h.fees)}</b></div>
+      <div class="kv">
+        <div><span>${T('nowPrice')}</span><b class="num">${h.hasPrice ? px(h.price) : T('noQuote')}</b></div>
         <div><span>${T('mv')}</span><b class="num">${money(h.mv)}</b></div>
         ${closed
           ? `<div><span>${T('realized')}</span><b class="num ${cls(h.realized)}">${signed(h.realized)}</b></div>`
           : `<div><span>${T('unreal')}</span><b class="num ${cls(h.pl)}">${signed(h.pl)} <small>(${pct(h.plPct)})</small></b></div>`}
+        <div><span>${T('avg')}</span><b class="num">${px(h.avg)}</b></div>
+        <div><span>${T('cost')}</span><b class="num">${money(h.cost)}</b></div>
+        <div><span>${T('fee')}</span><b class="num">${money(h.fees)}</b></div>
       </div>
       <div class="trows">${rows}</div>
     </section>`;
