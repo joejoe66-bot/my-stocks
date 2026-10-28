@@ -185,8 +185,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
   </div>
   <label><span data-i="note"></span><input id="f_note" data-ip="optional"></label>
   <div class="preview">
-    <div><span data-i="amount"></span><b class="num" id="f_amt">US$0.00</b></div>
-    <div class="muted"><span data-i="fee"></span><span class="num" id="f_feev">US$0.00</span></div>
+    <div><span data-i="amount"></span><b class="num" id="f_amt">$0.00</b></div>
+    <div class="muted"><span data-i="fee"></span><span class="num" id="f_feev">$0.00</span></div>
   </div>
   <div class="hint" id="f_hint"></div>
   <button class="primary" id="f_save" onclick="saveForm()" data-i="save"></button>
@@ -220,14 +220,14 @@ const I18N = {
   zh: {
     title:'我的股票', updated:'更新於 {t} · 股價約延遲 15–20 分鐘',
     offline:'連唔到伺服器，顯示緊上次嘅資料。', demo:'示範模式：顯示緊示範數據，唔會影響你嘅真實紀錄。',
-    mvTotal:'總市值 (US$)', cost:'總成本', latest:'最新變動', realized:'已實現盈虧', fees:'總佣金', fee:'佣金',
+    mvTotal:'總市值 ($)', cost:'總成本', latest:'最新變動', realized:'已實現盈虧', fees:'總佣金', fee:'佣金',
     alloc:'資產分佈', holdingsShort:'持倉', holdings:'持倉', shares:'持股', avg:'平均成本', mv:'市值',
     unreal:'未實現盈虧', noQuote:'未有報價', noHold:'目前冇持倉',
     empty:'未有任何紀錄<br><br>按右下角 <b>＋</b> 新增第一筆交易', noRec:'未有紀錄',
     all:'全部', nTrade1:'1 筆', nTrades:'{n} 筆', nShares:'{n} 股', soldOut:'已全部賣出', avgCost:'平均成本 {p}',
     buy:'買入', sell:'賣出', tabHome:'總覽', tabTrades:'交易紀錄',
     formNew:'新增交易', formEdit:'編輯交易', ticker:'股票代號', tickerPh:'例如 INTC', date:'日期', qty:'股數',
-    priceL:'價格 (US$)', feeL:'佣金 (US$)', note:'備註', optional:'選填', amount:'金額', proceeds:'賣出金額',
+    priceL:'價格 ($)', feeL:'佣金 ($)', note:'備註', optional:'選填', amount:'金額', proceeds:'賣出金額',
     save:'儲存', saving:'儲存中…', del:'刪除這筆紀錄', close:'關閉', held:'目前持有 {n} 股',
     refreshed:'股價已更新', netErr:'網絡出錯，稍後再試', err:'出錯：', saved:'已儲存 ✓', deleted:'已刪除',
     saveFail:'儲存失敗：', delFail:'刪除失敗：', needTicker:'請輸入股票代號', needDate:'請揀日期',
@@ -240,14 +240,14 @@ const I18N = {
   en: {
     title:'My Stocks', updated:'Updated {t} · prices delayed ~15–20 min',
     offline:"Can't reach the server — showing your last saved data.", demo:"Demo mode: sample data only, your real records aren't affected.",
-    mvTotal:'Market value (US$)', cost:'Total cost', latest:'Latest change', realized:'Realized P/L', fees:'Total fees', fee:'Fees',
+    mvTotal:'Market value ($)', cost:'Total cost', latest:'Latest change', realized:'Realized P/L', fees:'Total fees', fee:'Fees',
     alloc:'Allocation', holdingsShort:'Holdings', holdings:'Holdings', shares:'Shares', avg:'Avg cost', mv:'Market value',
     unreal:'Unrealized P/L', noQuote:'No quote', noHold:'No holdings',
     empty:'No records yet<br><br>Tap <b>＋</b> to add your first trade', noRec:'No records',
     all:'All', nTrade1:'1 trade', nTrades:'{n} trades', nShares:'{n} sh', soldOut:'Fully sold', avgCost:'Avg cost {p}',
     buy:'Buy', sell:'Sell', tabHome:'Overview', tabTrades:'Trades',
     formNew:'New trade', formEdit:'Edit trade', ticker:'Ticker', tickerPh:'e.g. INTC', date:'Date', qty:'Shares',
-    priceL:'Price (US$)', feeL:'Fees (US$)', note:'Note', optional:'Optional', amount:'Amount', proceeds:'Proceeds',
+    priceL:'Price ($)', feeL:'Fees ($)', note:'Note', optional:'Optional', amount:'Amount', proceeds:'Proceeds',
     save:'Save', saving:'Saving…', del:'Delete this trade', close:'Close', held:'You hold {n} shares',
     refreshed:'Prices updated', netErr:'Network error — try again later', err:'Error: ', saved:'Saved ✓', deleted:'Deleted',
     saveFail:'Save failed: ', delFail:'Delete failed: ', needTicker:'Enter a ticker', needDate:'Pick a date',
@@ -273,10 +273,10 @@ function toggleLang(){ LANG = LANG === 'zh' ? 'en' : 'zh'; LS.set('mystocks_lang
 
 /* ---------- 格式 ---------- */
 const nf = (v,a,b) => Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:a,maximumFractionDigits:b});
-const money = v => (v < 0 ? '-' : '') + 'US$' + nf(v,2,2);
-const signed = v => (v > 0.0049 ? '+' : v < -0.0049 ? '-' : '') + 'US$' + nf(v,2,2);
+const money = v => (v < 0 ? '-' : '') + '$' + nf(v,2,2);
+const signed = v => (v > 0.0049 ? '+' : v < -0.0049 ? '-' : '') + '$' + nf(v,2,2);
 const pct = v => (v > 0.00005 ? '+' : '') + (v*100).toFixed(2) + '%';
-const px = v => 'US$' + nf(v,2,4);
+const px = v => '$' + nf(v,2,4);
 const sharesF = v => v.toLocaleString('en-US',{maximumFractionDigits:4});
 const cls = v => v > 0.0049 ? 'up' : v < -0.0049 ? 'down' : '';
 const bg = v => v > 0.0049 ? 'bg-up' : v < -0.0049 ? 'bg-down' : 'bg-flat';
